@@ -2,64 +2,83 @@ include <MCAD/involute_gears.scad>
 include <pin_connectors/pins.scad>
 
 // Controls which objects are included in the print.
-print_gears = [0, 0, 0];
+print_gears = [1, 1, 1];
 print_tree = true;
 
+// Set this to true for final printing, but false for designing
+print_gears_elsewhere = true;
+
 bore_diameter = 6;
-pressure_angle = 25;
+pressure_angle = 22;
 gear_thick = 4;
 
-translate([-10, -15, 0])
-union() {
-  if (print_gears[0]) {
-    gear(number_of_teeth = 21,
-         circular_pitch = 300,
-         bore_diameter = bore_diameter,
-         hub_diameter = 4,
-         rim_width = 1,
-         hub_thickness = gear_thick,
-         rim_thickness = gear_thick,
-         gear_thickness = gear_thick,
-         pressure_angle = pressure_angle);
+// Where the pins/axles are translated.
+// Gears are translated here for rendering as well, but not for printing
+pins_xlat = [
+  [-10, -15, 0],
+  [13.2, -14.9, 6.05],
+  [1.6, -2.4, 0]];
 
-    translate([0, 0, 4])
-      gear(number_of_teeth = 19,
-           circular_pitch = 250,
+gears_xlat = print_gears_elsewhere ?
+  [[50, -15, -4], [40, 20, -4], [70, 10, -4]] : pins_xlat;
+
+
+module gears() {
+  union() {
+    if (print_gears[0]) {
+      translate([0, 0, 6])
+      translate(gears_xlat[0])
+      gear(number_of_teeth = 21,
+           circular_pitch = 225,
            bore_diameter = bore_diameter,
-           hub_diameter = 4,
+           hub_diameter = 10,
            rim_width = 1,
            hub_thickness = gear_thick,
            rim_thickness = gear_thick,
            gear_thickness = gear_thick,
            pressure_angle = pressure_angle);
-  }
 
-  if(print_gears[1]) {
-    translate([35, 0, 0])
-      gear(number_of_teeth = 15,
-           circular_pitch = 300,
+      translate(gears_xlat[0])
+      gear(number_of_teeth = 20,
+           circular_pitch = 175,
            bore_diameter = bore_diameter,
-           hub_diameter = 4,
+           hub_diameter = 10,
            rim_width = 1,
-           hub_thickness = gear_thick,
+           hub_thickness = gear_thick + 2.1,
            rim_thickness = gear_thick,
            gear_thickness = gear_thick,
            pressure_angle = pressure_angle);
-  }
+    }
 
-  if(print_gears[2]) {
-    translate([70, 0, 0])
-      gear(number_of_teeth = 18,
-           circular_pitch = 350,
-           bore_diameter = bore_diameter,
-           hub_diameter = 4,
-           rim_width = 1,
-           hub_thickness = gear_thick,
-           rim_thickness = gear_thick,
-           gear_thickness = gear_thick,
-           pressure_angle = pressure_angle);
+    if(print_gears[1]) {
+      translate(gears_xlat[1])
+        gear(number_of_teeth = 15,
+             circular_pitch = 225,
+             bore_diameter = bore_diameter,
+             hub_diameter = 8,
+             rim_width = 1,
+             hub_thickness = gear_thick,
+             rim_thickness = gear_thick,
+             gear_thickness = gear_thick,
+             pressure_angle = pressure_angle,
+             circles = 10);
+    }
+
+    if(print_gears[2]) {
+      translate(gears_xlat[2])
+        gear(number_of_teeth = 14,
+             circular_pitch = 175,
+             bore_diameter = bore_diameter,
+             hub_diameter = 4,
+             rim_width = 1,
+             hub_thickness = gear_thick,
+             rim_thickness = gear_thick,
+             gear_thickness = gear_thick,
+             pressure_angle = pressure_angle);
+    }
   }
 }
+gears();
 
 module treeBranch(size=30, angle = 30, depth=3) {
   union() {
@@ -126,11 +145,20 @@ module trunk(size=10, thickness = 3, precision = 40) {
 
 module tree(size = 1, angle = 30, depth = 4) {
   treePlate(size = size, angle = angle, depth = depth);
-  translate([0, -29 * size, 0]) trunk(size = 7 * size, thickness = 5 * size);
+  translate([0, -28.5 * size, 0]) trunk(size = 8 * size, thickness = 5 * size);
 }
 
 if (print_tree) {
-  translate([-10, -15, 0])
-    pin(h = 10.5, r=0.94 * (bore_diameter / 2), lh=2, lt=0.25);
+  bore_slop = 0.82;
+  translate(pins_xlat[0])
+    pin(h = 12.75, r= bore_slop * (bore_diameter / 2), lh=2, lt=0.5);
+  translate(pins_xlat[1])
+  union() {
+    pin(h = 6.75, r = bore_slop * (bore_diameter / 2), lh=2, lt=0.5);
+    translate([0, 0, -6])
+    cylinder(h = 6, r = 8);
+  }
+  translate(pins_xlat[2])
+    pin(h=6.75, r = bore_slop * (bore_diameter / 2), lh=2, lt=0.5);
   translate([0, 0, -4]) tree(size = 1);
 }
