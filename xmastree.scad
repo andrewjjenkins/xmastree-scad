@@ -1,16 +1,17 @@
 include <MCAD/involute_gears.scad>
 include <pin_connectors/pins.scad>
 
+// Controls which objects are included in the print.
+print_gears = [0, 0, 0];
+print_tree = true;
+
 bore_diameter = 6;
 pressure_angle = 25;
 gear_thick = 4;
 
-print_gears = true;
-print_tree = true;
-
-if (print_gears) {
-  translate([-10, -15, 0])
-  union() {
+translate([-10, -15, 0])
+union() {
+  if (print_gears[0]) {
     gear(number_of_teeth = 21,
          circular_pitch = 300,
          bore_diameter = bore_diameter,
@@ -31,7 +32,9 @@ if (print_gears) {
            rim_thickness = gear_thick,
            gear_thickness = gear_thick,
            pressure_angle = pressure_angle);
+  }
 
+  if(print_gears[1]) {
     translate([35, 0, 0])
       gear(number_of_teeth = 15,
            circular_pitch = 300,
@@ -42,7 +45,9 @@ if (print_gears) {
            rim_thickness = gear_thick,
            gear_thickness = gear_thick,
            pressure_angle = pressure_angle);
+  }
 
+  if(print_gears[2]) {
     translate([70, 0, 0])
       gear(number_of_teeth = 18,
            circular_pitch = 350,
