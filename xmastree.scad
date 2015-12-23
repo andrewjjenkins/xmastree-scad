@@ -1,3 +1,58 @@
+include <MCAD/involute_gears.scad>
+
+bore_diameter = 6;
+pressure_angle = 25;
+gear_thick = 4;
+
+print_gears = true;
+
+if (print_gears) {
+  translate([-10, -15, 0])
+  union() {
+    gear(number_of_teeth = 21,
+         circular_pitch = 300,
+         bore_diameter = bore_diameter,
+         hub_diameter = 4,
+         rim_width = 1,
+         hub_thickness = gear_thick,
+         rim_thickness = gear_thick,
+         gear_thickness = gear_thick,
+         pressure_angle = pressure_angle);
+
+    translate([0, 0, 4])
+      gear(number_of_teeth = 19,
+           circular_pitch = 250,
+           bore_diameter = bore_diameter,
+           hub_diameter = 4,
+           rim_width = 1,
+           hub_thickness = gear_thick,
+           rim_thickness = gear_thick,
+           gear_thickness = gear_thick,
+           pressure_angle = pressure_angle);
+
+    translate([35, 0, 0])
+      gear(number_of_teeth = 15,
+           circular_pitch = 300,
+           bore_diameter = bore_diameter,
+           hub_diameter = 4,
+           rim_width = 1,
+           hub_thickness = gear_thick,
+           rim_thickness = gear_thick,
+           gear_thickness = gear_thick,
+           pressure_angle = pressure_angle);
+
+    translate([70, 0, 0])
+      gear(number_of_teeth = 18,
+           circular_pitch = 350,
+           bore_diameter = bore_diameter,
+           hub_diameter = 4,
+           rim_width = 1,
+           hub_thickness = gear_thick,
+           rim_thickness = gear_thick,
+           gear_thickness = gear_thick,
+           pressure_angle = pressure_angle);
+  }
+}
 
 module treeBranch(size=30, angle = 30, depth=3) {
   union() {
