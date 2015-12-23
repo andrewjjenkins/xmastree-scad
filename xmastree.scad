@@ -1,4 +1,5 @@
 include <MCAD/involute_gears.scad>
+include <pin_connectors/pins.scad>
 
 bore_diameter = 6;
 pressure_angle = 25;
@@ -124,5 +125,7 @@ module tree(size = 1, angle = 30, depth = 4) {
 }
 
 if (print_tree) {
+  translate([-10, -15, 0])
+    pin(h = 10.5, r=0.94 * (bore_diameter / 2), lh=2, lt=0.25);
   translate([0, 0, -4]) tree(size = 1);
 }
