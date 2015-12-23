@@ -5,6 +5,7 @@ pressure_angle = 25;
 gear_thick = 4;
 
 print_gears = true;
+print_tree = true;
 
 if (print_gears) {
   translate([-10, -15, 0])
@@ -117,9 +118,11 @@ module trunk(size=10, thickness = 3, precision = 40) {
   }
 }
 
-module tree(size = 1, angle = 30, depth = 3) {
+module tree(size = 1, angle = 30, depth = 4) {
   treePlate(size = size, angle = angle, depth = depth);
   translate([0, -29 * size, 0]) trunk(size = 7 * size, thickness = 5 * size);
 }
 
-tree(size = 1);
+if (print_tree) {
+  translate([0, 0, -4]) tree(size = 1);
+}
