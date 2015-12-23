@@ -155,8 +155,8 @@ if (print_tree) {
   translate(pins_xlat[1])
   union() {
     pin(h = 6.75, r = bore_slop * (bore_diameter / 2), lh=2, lt=0.5);
-    translate([0, 0, -6])
-    cylinder(h = 6, r = 8);
+    translate([0, 0, -6.1])
+    cylinder(h = 6.11, r = 8);
   }
   translate(pins_xlat[2])
     pin(h=6.75, r = bore_slop * (bore_diameter / 2), lh=2, lt=0.5);
