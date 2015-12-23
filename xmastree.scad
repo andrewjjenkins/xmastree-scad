@@ -20,62 +20,63 @@ pins_xlat = [
   [1.6, -2.4, 0]];
 
 gears_xlat = print_gears_elsewhere ?
-  [[50, -15, -4], [40, 20, -4], [70, 10, -4]] : pins_xlat;
+  [[50, -15, 6], [40, 20, -4], [70, 10, -4]] : pins_xlat;
 
 
 module gears() {
-  union() {
-    if (print_gears[0]) {
-      translate([0, 0, 6])
+  if (print_gears[0]) {
+    printFlip = print_gears_elsewhere ? [ 180, 0, 0 ] : [ 0, 0, 0 ];
+    union() {
       translate(gears_xlat[0])
-      gear(number_of_teeth = 21,
-           circular_pitch = 225,
-           bore_diameter = bore_diameter,
-           hub_diameter = 10,
-           rim_width = 1,
-           hub_thickness = gear_thick,
-           rim_thickness = gear_thick,
-           gear_thickness = gear_thick,
-           pressure_angle = pressure_angle);
-
-      translate(gears_xlat[0])
-      gear(number_of_teeth = 20,
-           circular_pitch = 175,
-           bore_diameter = bore_diameter,
-           hub_diameter = 10,
-           rim_width = 1,
-           hub_thickness = gear_thick + 2.1,
-           rim_thickness = gear_thick,
-           gear_thickness = gear_thick,
-           pressure_angle = pressure_angle);
-    }
-
-    if(print_gears[1]) {
-      translate(gears_xlat[1])
-        gear(number_of_teeth = 15,
+      rotate(printFlip)
+      union() {
+        translate([0, 0, 6])
+        gear(number_of_teeth = 21,
              circular_pitch = 225,
              bore_diameter = bore_diameter,
-             hub_diameter = 8,
-             rim_width = 1,
-             hub_thickness = gear_thick,
-             rim_thickness = gear_thick,
-             gear_thickness = gear_thick,
-             pressure_angle = pressure_angle,
-             circles = 10);
-    }
-
-    if(print_gears[2]) {
-      translate(gears_xlat[2])
-        gear(number_of_teeth = 14,
-             circular_pitch = 175,
-             bore_diameter = bore_diameter,
-             hub_diameter = 4,
+             hub_diameter = 10,
              rim_width = 1,
              hub_thickness = gear_thick,
              rim_thickness = gear_thick,
              gear_thickness = gear_thick,
              pressure_angle = pressure_angle);
+        gear(number_of_teeth = 20,
+             circular_pitch = 175,
+             bore_diameter = bore_diameter,
+             hub_diameter = 22,
+             rim_width = 1,
+             hub_thickness = gear_thick + 2.1,
+             rim_thickness = gear_thick,
+             gear_thickness = gear_thick,
+             pressure_angle = pressure_angle);
+      }
     }
+  }
+
+  if(print_gears[1]) {
+    translate(gears_xlat[1])
+      gear(number_of_teeth = 15,
+           circular_pitch = 225,
+           bore_diameter = bore_diameter,
+           hub_diameter = 8,
+           rim_width = 1,
+           hub_thickness = gear_thick,
+           rim_thickness = gear_thick,
+           gear_thickness = gear_thick,
+           pressure_angle = pressure_angle);
+  }
+
+  if(print_gears[2]) {
+    translate(gears_xlat[2])
+      gear(number_of_teeth = 14,
+           circular_pitch = 175,
+           bore_diameter = bore_diameter,
+           hub_diameter = 4,
+           rim_width = 1,
+           hub_thickness = gear_thick,
+           rim_thickness = gear_thick,
+           gear_thickness = gear_thick,
+           pressure_angle = pressure_angle);
   }
 }
 gears();
