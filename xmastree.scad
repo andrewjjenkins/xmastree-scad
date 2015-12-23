@@ -1,18 +1,10 @@
-module treeBranch(size=30, angle = 30, depth=3, shallow=1) {
-  subtractive_radius = (5.5/10)*size;
-  subtractive_xoffset = size/2;
-  border_thick = 0.075;
 
+module treeBranch(size=30, angle = 30, depth=3) {
   union() {
     difference() {
+      // Main cylinder: foundation of the branch
       translate([0, 0 * size, 0])
-      difference() {
-        // Main cylinder: foundation of the branch
         cylinder(r=size, h=depth);
-        // Sub-cylinder that makes the lowered area
-        translate([0, 0, shallow])
-          cylinder(r = ((1 - border_thick) * size), h = depth);
-      }
 
       // Subtract everything beyond [-angle, angle]
       // so that the tree branch is a subset of the circle
@@ -25,21 +17,18 @@ module treeBranch(size=30, angle = 30, depth=3, shallow=1) {
         translate([0, 0, -size])
         cube(size=size * 4);
     }
-
-  // Raised areas on the radials where the branches end
-  rotate([0, 0, 90+angle])
-    translate([-border_thick * size, 0, 0])
-    cube([border_thick * size, (1 - border_thick) * size, depth]);
-  rotate([0, 0, -90-angle])
-    cube([border_thick * size, (1 - border_thick) * size, depth]);
   }
 }
-treeBranch();
-translate([0, 13, 0]) treeBranch(size = 22);
-translate([0, 22, 0]) treeBranch(size = 15);
-translate([0, 27, 0]) treeBranch(size = 8);
-//translate([-6, 0, 0]) treeBranch();
-//translate([0, -20, 0]) treeBranch(size=40);
+
+module treePlate(size = 1, angle = 30, depth = 3) {
+  for (scale_xform = [[29, 0], [22, 13], [15, 22], [8, 27]]) {
+    xlateVec = [0, scale_xform[1] * size, 0];
+    scaleSize = scale_xform[0] * size;
+    translate(xlateVec)
+      treeBranch(size = scaleSize, angle = angle, depth = depth);
+  }
+}
+
 
 module trunk(size=10, thickness = 3, precision = 40) {
   growth = 1.2;
@@ -72,4 +61,10 @@ module trunk(size=10, thickness = 3, precision = 40) {
       cube([size * 2, size * 3, size * 2]);
   }
 }
-translate([0, -29.75, 0]) trunk(size = 7, thickness = 5);
+
+module tree(size = 1, angle = 30, depth = 3) {
+  treePlate(size = size, angle = angle, depth = depth);
+  translate([0, -29 * size, 0]) trunk(size = 7 * size, thickness = 5 * size);
+}
+
+tree(size = 1);
