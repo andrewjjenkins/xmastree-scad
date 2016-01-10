@@ -135,9 +135,9 @@ module tree(size = 1, angle = 30, depth = 4) {
 }
 
 if (print_tree) {
-  bore_slop = 0.9;
+  bore_slop = 0.88;
   translate(pins_xlat[0])
-    pin(h = 11.75, r= bore_slop * (bore_diameter / 2), lh=2, lt=0.35);
+    pin(h = 11.75, r= bore_slop * (bore_diameter / 2), lh=2, lt=0.30);
   translate(pins_xlat[1])
   union() {
     pin(h = 5.75, r = bore_slop * (bore_diameter / 2), lh=1.75, lt=0.30);
@@ -145,6 +145,6 @@ if (print_tree) {
     cylinder(h = 6.11, r = 8);
   }
   translate(pins_xlat[2])
-    pin(h=5.75, r = bore_slop * (bore_diameter / 2), lh=2, lt=0.35);
+    pin(h=5.75, r = bore_slop * (bore_diameter / 2), lh=2, lt=0.30);
   translate([0, 0, -4]) tree(size = 1);
 }
